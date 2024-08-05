@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Successful</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Upload Successful</h1>
+        <p>The conference details have been uploaded successfully.</p>
+        <p>Conference Title: {{ title }}</p>
+        <img src="{{ url_for('static', filename=logo) }}" alt="Conference Logo" class="logo">
+        <p>Scan the QR code below to access the conference chatbot:</p>
+        <img src="{{ url_for('static', filename=qrcode) }}" alt="QR Code" class="qrcode">
+    </div>
+</body>
+</html>

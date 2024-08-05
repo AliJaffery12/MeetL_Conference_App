@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UI Organizers</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <img src="{{ url_for('static', filename='Original.png') }}" alt="OpenSci Logo" class="logo">
+        <h1>OpenSci Chatbot</h1>
+        <p class="greeting">Hello Organizer,</p>
+        <p class="instruction">Please provide the conference details and upload the required files</p>
+        <form action="{{ url_for('upload_file') }}" method="post" enctype="multipart/form-data">
+            <div class="input-group">
+                <label for="title">Conference Title:</label>
+                <input type="text" id="title" name="title" required>
+            </div>
+            <div class="file-input-wrapper">
+                <label for="logo">Conference Logo:</label>
+                <button type="button" class="file-input-button">Choose Logo</button>
+                <input type="file" id="logo" name="logo" accept="image/*" required>
+                <span class="file-name" id="logo-name">No file chosen</span>
+            </div>
+            <div class="file-input-wrapper">
+                <label for="file">Conference File (PDF/Word/TXT):</label>
+                <button type="button" class="file-input-button">Choose File</button>
+                <input type="file" id="file" name="file" accept=".pdf,.doc,.docx,.txt" required>
+                <span class="file-name" id="file-name">No file chosen</span>
+            </div>
+            <div class="button-container">
+                <button type="submit" class="upload-button">Upload</button>
+            </div>
+        </form>
+    </div>
+    <script>
+        function setupFileInput(buttonSelector, inputSelector, nameSelector) {
+            console.log('Setting up:', buttonSelector, inputSelector, nameSelector);
+            
+            document.querySelector(buttonSelector).addEventListener('click', function() {
+                console.log('Button clicked:', buttonSelector);
+                document.querySelector(inputSelector).click();
+            });
+    
+            document.querySelector(inputSelector).addEventListener('change', function() {
+                console.log('File changed:', inputSelector);
+                let fileName = this.files[0] ? this.files[0].name : 'No file chosen';
+                console.log('File name:', fileName);
+                document.querySelector(nameSelector).textContent = fileName;
+            });
+        }
+    
+        setupFileInput('.file-input-wrapper:nth-child(2) .file-input-button', '#logo', '#logo-name');
+        setupFileInput('.file-input-wrapper:nth-child(3) .file-input-button', '#file', '#file-name');
+    </script>
+    
+
+        
+</body>
+</html>

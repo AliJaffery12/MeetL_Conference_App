@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} - Chatbot</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='chatbot_styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <img src="{{ url_for('static', filename='CAS_Logo_Highres.png') }}" alt="Conference Logo" class="logo">
+        <h1>OpenSci individual chatbot for your scientific conference</h1>
+        <div id="name-input-container">
+            <input type="text" id="name-input" placeholder="Please give me your name">
+            <button id="submit-name" class="submit-button">Submit</button>
+        </div>
+        <div id="chat-container" style="display: none;">
+            <div id="chat-messages"></div>
+            <div id="input-container">
+                <input type="text" id="user-input" placeholder="Ask a question...">
+                <button onclick="sendMessage()" class="submit-button">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $('#submit-name').click(function() {
+            var name = $('#name-input').val();
+            if (name.trim() !== '') {
+                $('#name-input-container').hide();
+                $('#chat-container').show();
+                $('#chat-messages').append('<p class="bot-message">Hello ' + name + '! How can I assist you today?</p>');
+            }
+        });
+
+        function sendMessage() {
+            var userInput = $('#user-input').val();
+            if (userInput.trim() === '') return;
+
+            $('#chat-messages').append('<p class="user-message">' + userInput + '</p>');
+            $('#user-input').val('');
+
+            $.ajax({
+                url: '/ask',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ question: userInput }),
+                success: function(response) {
+                    $('#chat-messages').append('<p class="bot-message">' + response.answer + '</p>');
+                    $('#chat-messages').scrollTop($('#chat-messages')[0].scrollHeight);
+                }
+            });
+        }
+
+        $('#user-input').keypress(function(e) {
+            if (e.which == 13) {
+                sendMessage();
+                return false;
+            }
+        });
+    </script>
+</body>
+</html>
